@@ -1,6 +1,6 @@
 schema: osera-patch-evidence/0.1.0
 producer: moderne
-release: 3.3.5-backpatch-00001
+release: 3.3.5-backpatch-00002
 baseline: v3.3.4+backpatch.baseline
 fixes:
   - cve: CVE-2026-32141
@@ -10,12 +10,20 @@ fixes:
     basis: backport
     artifacts:
       - flatted
-    note: "New in this release; upstream's fix in 3.4.0 (7774aae, 7eb65d8). It closes the advisory: flatted vulnerable to unbounded recursion DoS in parse() revive phase."
+    note: "Carried from 3.3.5-backpatch-00001; upstream's fix in 3.4.0 (7774aae, 7eb65d8). It closes the advisory: flatted vulnerable to unbounded recursion DoS in parse() revive phase."
+  - cve: CVE-2026-33228
+    upstream_fix_url: https://github.com/WebReflection/flatted/commit/885ddcc33cf9657caf38c57c7be45ae1c5272802
+    advisory_url: https://nvd.nist.gov/vuln/detail/CVE-2026-33228
+    patch_commit_url: https://github.com/moderne-backpatch-alliance/backpatch-flatted/commit/5e02406
+    basis: adapted
+    artifacts:
+      - flatted
+    note: "New in this release; upstream's fix in 3.4.2, adapted to 3.3.4. It closes the advisory: Prototype Pollution via parse() in NodeJS flatted."
 tests:
-  commit: 43b4536f3b6e9afdc98869c039ebf4eb62f26bc8
+  commit: 5e02406120b473cb546cf5a7efc5fa7262ee28a6
   command: npm pack --ignore-scripts, then node test/index.js and node test/recursion.js in the tested tree with the packed files laid over, one JUnit test per command from its exit status
   runtime: Node.js v22.16.0, macOS 27.2 arm64
-  report: flatted-3.3.5-backpatch-00001-tests.zip
-  report_sha256: e147b5f287eb92a69853c04b654ff868c6c26b8e28446b7dc3c87e8ae3e70d46
+  report: flatted-3.3.5-backpatch-00002-tests.zip
+  report_sha256: 9cec53bc6ee72b1e304af35800f68a3e1c66e9c4cc0948e41ad9d70348fc8363
   result: pass
-  note: "upstream's node test/index.js and test/recursion.js on the packed package's files at the tested commit: 2 tests, 2 passed, 0 failed, 0 skipped. The CVE tests (test/recursion.js), with this release's production lines reverted at the tested commit: 1 tests, 0 passed, 1 failed, 0 skipped; with them: 1 tests, 1 passed, 0 failed, 0 skipped. Built with no build step (cjs/, esm/, es.js, esm.js, min.js are tracked), npm pack --ignore-scripts in a directory named flatted, 8 of npmjs's 15 files for 3.3.4 are identical; the rest are cjs/index.js, es.js, esm.js, esm/index.js, index.js, min.js, package.json. The archive's file-origins.yaml maps each packaged file to the commit, or names its inputs and build."
+  note: "upstream's node test/index.js and test/recursion.js on the packed package's files at the tested commit: 3 tests, 3 passed, 0 failed, 0 skipped. The CVE tests (test/cve-2026-33228.js), with this release's production lines reverted at the tested commit: 1 tests, 0 passed, 1 failed, 0 skipped; with them: 1 tests, 1 passed, 0 failed, 0 skipped. Built with no build step (cjs/, esm/, es.js, esm.js, min.js are tracked), npm pack --ignore-scripts in a directory named flatted, 8 of npmjs's 15 files for 3.3.4 are identical; the rest are cjs/index.js, es.js, esm.js, esm/index.js, index.js, min.js, package.json. The archive's file-origins.yaml maps each packaged file to the commit, or names its inputs and build."
